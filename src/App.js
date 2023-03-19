@@ -1,19 +1,23 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
-import X from "./imgs/button/X.jpg";
+import checked from "./imgs/button/checked.svg"
+import X from "./imgs/button/X.png";
 import send from "./imgs/button/send.png"
-
+/* INICIO ESTILIZAÇÃO */
 const Main = styled.main`
 display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: center;
 height: 100vh;
+width: 100vw;
 `
 const ToDoStyle = styled.span`
 border: solid black;
 background-color: rgb(254, 255, 179);
-min-width: 15rem; /* ou 18rem */ 
+min-width: 20rem;  
+max-width: 30rem;
+max-height: 32rem;
 border-radius: 1em;
 display: flex; 
 flex-direction: column;
@@ -21,89 +25,124 @@ justify-content: center;
 align-items: center;`
 
 const SuperiorStyleDiv = styled.div`
+max-height: 4rem;  
 border-bottom: solid black;
-margin-bottom: 10px;
 border-radius: 0.9em 0.9em 0em 0em;
+background-color:orange;
+width: 100%;` 
+
+const BoxArgolas = styled.div`
 display: flex;
 justify-content: space-around;
-align-items: center;
-gap: 2.5rem;
-background-color:orange;
-width: 100%;`
+height: 0;`
+
+const H1 = styled.h1`
+font-size: 3rem;
+height: 3rem;
+margin: 11px 0px 5px 0px;
+font-family: 'Zeyada', cursive;
+display:flex;
+justify-content:center;`
 
 const Argolas = styled.span`
 position: relative;
-bottom: 2rem;
+bottom: 1.5rem;
 border: solid black;
-height:7.5vh;
-width: 0.5vw;
+height:2.5rem;
+width: 0.5rem;
 background-color:white;
 border-radius: 1rem;`
 
 const Box = styled.div`
-display:flex;`
+width: 100%;
+border-bottom: solid red 2px;
+display: flex;
+justify-content: center;`
+
+const Form = styled.form`
+height:0;`
 
 const Input = styled.input`
-display: block;
-width: 100%;
-padding: 10px;
-font-size: 16px;
+height: 2.5rem;
+font-size: 1rem;
 border: none;
-border-bottom: 2px solid #ccc;
 outline: none;
-background-color: transparent;` 
+background-color: transparent;
+::placeholder{
+  text-align: center;
+  position: relative;
+  top: 0.5rem;
+  left: 0.5rem;
+}`
 
 const Button = styled.button`
-border: 1px solid black;`
-
-/* const Button = styled.button`
 background-image: url(${send});
 background-repeat: no-repeat;
 background-size: cover;
-width: 1.5rem;
-height: 1.5rem;
-mix-blend-mode: darken;
+background-color: transparent;
+position: relative;
+top: 0.063rem;
+width: 2.5rem;
+height: 2.5rem;
 border: none;
-cursor: pointer;` */
+cursor: pointer;`
 
 const Ul = styled.ul`
+background: red;
 display: flex;
 flex-direction: column;
-gap:0.5rem;
+gap:0.125rem;
+margin-top:0;
+margin-bottom:0.5rem;
+border-bottom: solid red 0.125rem;
 padding:0;
+width: 100%;
 overflow-y: auto;
 max-height: 28.3rem;`
 
 const Li = styled.li`
+font-family: 'Raleway', sans-serif;
 list-style: none;
 border-left: solid #2196F3;
+border-radius: 0.1rem;
 background-color: #ddffff;
-max-width: 35vw;
+max-width: 30rem;
 word-break: break-all;
-font-weight: bold;
+font-weight: 600;
 display: flex;
 justify-content: space-between;
-align-items: center;
-`
+align-items: center;`
 
-const ButtonLi = styled.button`
+const BoxButtons = styled.div`
+margin-left: 0.5rem;`
+
+const ButtonLiCheck = styled.button`
+background-image: url(${checked});
+background-repeat: no-repeat;
+background-size: cover;
+background-color: transparent;
+width: 1.5rem;
+height: 1.5rem;
+border: none;
+cursor: pointer;`
+
+const ButtonLiDel = styled.button`
 background-image: url(${X});
 background-repeat: no-repeat;
 background-size: cover;
+background-color: transparent;
 width: 1.5rem;
 height: 1.5rem;
-mix-blend-mode: darken;
 border: none;
-cursor: pointer;
-`
-
+cursor: pointer;`
+/* TERMINO ESTILIZAÇÃO */
 
 class App extends Component {
 state = {
   tarefa: undefined,
   lista: []
 }
-
+/* INICIO FUNÇÕES */
 handleChange = (e) => {
   this.setState({
   tarefa: e.target.value
@@ -129,26 +168,48 @@ buttonDel = (id) => {
 this.setState({
   lista: this.state.lista.filter((item) => {return item.id !== id;})
 })}
+
+buttonChecked = (id) => {
+  this.setState({
+  lista: this.state.lista.map((item) => {
+  if (item.id === id) 
+  {return {...item, checked: !item.checked};}
+  else 
+  {return item;}
+  })})}
+/* TERMINO FUNÇÕES */
 render () {
   return (
 <Main>
   <ToDoStyle>
-     <SuperiorStyleDiv> 
+     <SuperiorStyleDiv>
+      <BoxArgolas>
 <Argolas></Argolas>
 <Argolas></Argolas>
 <Argolas></Argolas>
 <Argolas></Argolas>
+<Argolas></Argolas>
+      </BoxArgolas>
+      <H1>To Do VNW</H1>
     </SuperiorStyleDiv>
   <Box>
-<form>
+<Form>
 <Input value={this.state.tarefa} onChange={this.handleChange} onKeyDown={this.handleKeyDown} placeholder='Adicionar uma tarefa'/>
-</form>
-<Button onClick={this.buttonAdd}>➤</Button>
+</Form>
+<Button onClick={this.buttonAdd}/>
   </Box>
 <Ul>
-  {this.state.lista.map((item) => (
-    <Li>{item.tarefa} <ButtonLi onClick={() => {this.buttonDel(item.id);}}/> </Li>
-    ))}
+{this.state.lista.map((item) => {
+return (
+<Li key={item.id} style={{ textDecoration: item.checked ? "line-through red 2px" : "none", color: item.checked ? "gray" : "black" }}>
+<span>{item.tarefa}</span>
+<BoxButtons>
+<ButtonLiCheck onClick={() => this.buttonChecked(item.id)}></ButtonLiCheck>
+<ButtonLiDel onClick={() => this.buttonDel(item.id)}></ButtonLiDel>
+</BoxButtons>
+</Li>
+);
+})}
 </Ul>
 </ToDoStyle>
 </Main>
